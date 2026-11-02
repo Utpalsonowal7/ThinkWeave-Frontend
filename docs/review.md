@@ -1,0 +1,17 @@
+# Manual frontend review
+
+These are pending acceptance scenarios, not automated test files or recorded passes. TypeScript and production builds are separate from full UI/integration verification.
+
+1. Start the frontend and open `/demo`. Add each object kind, move/resize objects, edit titles and shared body text, format selected text, change colors/shapes, connect objects, label/delete connectors, set task status/week/dependencies, undo, and redo. Reload and inspect IndexedDB persistence. The demo must be clearly labeled and must not imply connected collaborators or AI responses.
+2. At desktop and mobile widths, check sidebar navigation, collapsed tools, readable typography, keyboard focus, inspector scrolling, canvas controls, reduced motion, and no horizontal page overflow. Inspect Chrome/Firefox/Safari behavior as available.
+3. Configure and run the real backend. Exercise registration, verification, password/social login, explicit provider linking, reset, logout, serialized cross-tab refresh, and session revocation. Do not put secrets in frontend env variables. Reopen invitation email links after signing in.
+4. Create a workspace/board. Verify loading/empty/error states, board title filtering, role-aware creation, archive/unarchive, invitation listing/revocation, owner transfer, and member role/removal restrictions.
+5. Open one board in three independent authenticated clients. Confirm cursors, member scope, shared object selections, text merging, object edits, connectors, and read-only behavior. Disconnect one editor, edit in all clients, reconnect, and compare final state. Stop Redis and check explicit local presence scope and durable synchronization fallback.
+6. Interrupt a save and reconnect; preserve local changes and correct pending status. Exercise a difference over 256 KiB, quota rejection, expired access cookies, and lost acknowledgements. A failed save must not be described as saved. Export unsent changes before closing a failed/replaced board.
+7. Create anchored/board comments; reply, resolve/reopen, edit with the latest timestamp, delete own/moderated messages, navigate anchors, and walk cursor pages. Try a stale edit and another user's edit. Reload after an uncertain creation response rather than blindly creating a duplicate.
+8. Generate each real Gemini action, inspect results, switch context between selection/whole board, reject, approve, and resume pending proposals. Change board content after generation and verify stale approval is disabled/rejected. No model output should be rendered as executable HTML.
+9. Run the backend indexing worker. Search by meaning, navigate source objects across boards, inspect index state, and request reindexing. Confirm stale/archived/unauthorized boards do not appear in search.
+10. Save named versions, preview without modifying the board, inspect activity, compact, and restore as a manager. Confirm recovery snapshot/epoch changes, disconnected old clients, and export/reload instructions. Local edits made after initiating a restore must not be silently discarded.
+11. Build with `npm run build` and serve `dist/` with SPA rewrites. Verify deep links, HTTPS, credentialed requests, exact origins, OAuth return URLs, same-site cookies, and Socket.IO upgrades through the intended proxy.
+
+Record actual devices, services, dataset sizes, connection patterns, and failures during review. Do not infer production scale, latency, or integration success from build output or demo data.
